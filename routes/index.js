@@ -4,6 +4,9 @@ const UserController = require("../src/controllers/UserController");
 const ListController = require("../src/controllers/ListController");
 const TaskController = require("../src/controllers/TaskController");
 
+/* MIDDLEWARES */
+const authMiddleware = require("../src/middlewares/auth");
+
 // Rota principal
 router.get("/", (req, res) => {
   res.render("index");
@@ -12,7 +15,7 @@ router.get("/", (req, res) => {
 /* Rotas relacionadas ao usuário */
 router.post("/user/auth", UserController.auth);
 router.post("/user/store", UserController.store);
-router.get("/user/:user_id", UserController.show);
+router.get("/user/me", authMiddleware, UserController.show);
 
 /* Rotas relacionadas às listas do usuário */
 router.post("/user/:user_id/lists/store", ListController.store);

@@ -4,14 +4,14 @@ const JWToken = require("../util/JWToken");
 
 module.exports = {
   async show(req, res) {
-    const { user_id } = req.params;
+    const { user_id } = req.body;
 
     try {
       const user = await User.findByPk(user_id, {
         attributes: { exclude: ["password"] },
       });
 
-      res.status(201).json(user);
+      res.status(200).json(user);
     } catch (error) {
       console.log(error);
       return res.status(500).json({
@@ -32,7 +32,7 @@ module.exports = {
       });
 
       const token = JWToken.generate({
-        userid: user.id,
+        user_id: user.id,
       });
 
       res.status(200).json({
@@ -64,8 +64,8 @@ module.exports = {
           token: null,
         });
 
-      const token = JWToken.generate({
-        userid: user.id,
+      const token = JWToken.generateJwt({
+        user_id: user.id,
       });
 
       res.status(200).json({
