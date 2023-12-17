@@ -10,6 +10,7 @@ router.get("/", (req, res) => {
 });
 
 /* Rotas relacionadas ao usuário */
+router.post("/user/auth", UserController.auth);
 router.post("/user/store", UserController.store);
 router.get("/user/:user_id", UserController.show);
 

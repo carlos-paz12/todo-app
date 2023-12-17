@@ -47,4 +47,36 @@ module.exports = {
       });
     }
   },
+
+  async auth(req, res) {
+    const { username, password } = req.body;
+
+    try {
+      const user = await User.findOne({
+        where: {
+          username: username,
+        },
+      });
+
+      if (!bcrypt.compareSync(password, user.password))
+        return res.status(401).json({
+          auth: false,
+          token: null,
+        });
+
+      const token = JWToken.generate({
+        userid: user.id,
+      });
+
+      res.status(200).json({
+        auth: true,
+        token: token,
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({
+        message: error.message,
+      });
+    }
+  },
 };
